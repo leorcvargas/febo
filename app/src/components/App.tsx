@@ -1,15 +1,17 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
+import { fetchTracks } from '../redux/actions/track';
 import { TrackInterface } from 'src/interfaces/track';
 import Card from './card';
 import CardImage from './cardImage';
+import CardHeader from './cardHeader';
 import Player from './player';
 import TrackList from './trackList';
+import UploadCard from './uploadCard';
 import {
   PageView,
 } from './styles';
-import { fetchTracks } from '../redux/actions/track';
 
 interface PropTypes {
   tracks: TrackInterface[];
@@ -30,13 +32,14 @@ class App extends React.Component<PropTypes, any> {
     if (!this.props.currentTrack) {
       return (
         <Card>
-          <h2>Selecione um áudio da lista para tocar</h2>
+          <CardHeader>Selecione um áudio da lista</CardHeader>
         </Card>
       );
     }
 
     return (
       <Card>
+        <CardHeader>{this.props.currentTrack.name}</CardHeader>
         <CardImage source={this.props.currentTrack.img} />
         <Player track={this.props.currentTrack} />
       </Card>
@@ -48,6 +51,7 @@ class App extends React.Component<PropTypes, any> {
       <PageView>
         <TrackList tracks={this.props.tracks} />
         {this.renderCard()}
+        <UploadCard />
       </PageView>
     );
   }

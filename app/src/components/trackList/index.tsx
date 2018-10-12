@@ -4,10 +4,10 @@ import { bindActionCreators } from 'redux';
 
 import TrackListHeader from '../trackListHeader';
 import TrackListItem from '../trackListItem';
-import TrackListFooter from '../trackListFooter';
 import { TrackInterface } from 'src/interfaces/track';
 import {
   TrackListContainer,
+  List,
 } from './styles';
 import { chooseTrack } from '../../redux/actions/track';
 
@@ -36,8 +36,9 @@ class TrackList extends React.Component<PropTypes, any> {
     return (
       <TrackListContainer>
         <TrackListHeader />
-        {this.renderTracks()}
-        <TrackListFooter />
+        <List>
+          {this.renderTracks()}
+        </List>
       </TrackListContainer>
     );
   }

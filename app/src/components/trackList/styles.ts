@@ -7,3 +7,8 @@ export const TrackListContainer = styled.div`
   box-shadow: 0 0 2rem rgba(0,0,0,.4);
   width: 300px;
 `;
+
+export const List = styled.div`
+  max-height: calc(100vh - 56px);
+  overflow-y: scroll;
+`;

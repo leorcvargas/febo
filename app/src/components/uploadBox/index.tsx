@@ -3,6 +3,7 @@ import { FaCloudUploadAlt } from 'react-icons/fa';
 
 import {
   Uploader,
+  Text,
 } from './styles';
 
 interface PropTypes {
@@ -92,7 +93,7 @@ class UploadBox extends React.Component<PropTypes, any> {
         style={{ outlineColor: status.color }}
       >
         <FaCloudUploadAlt style={{ color: status.color }} />
-        <p>{status.message}</p>
+        <Text>{status.message}</Text>
         <input
           type={'file'}
           accept={`${accept}/*`}

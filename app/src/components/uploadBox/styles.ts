@@ -21,9 +21,13 @@ export const Uploader = styled.label`
   }
 
   &:hover {
-    outline-color: #432C85;
+    outline-color: #003EFF;
     & svg {
-      color: #432C85;
+      color: #003EFF;
     }
   }
+`;
+
+export const Text = styled.p`
+  text-align: center;
 `;

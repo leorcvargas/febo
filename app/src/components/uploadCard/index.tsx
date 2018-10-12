@@ -6,25 +6,31 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import { TrackInterface } from 'src/interfaces/track';
 import Input from '../input';
 import UploadBox from '../uploadBox';
-import { uploadTrack } from '../../redux/actions/track';
+import {
+  uploadTrack,
+  fetchTracks,
+} from '../../redux/actions/track';
 import {
   Container,
   UploadButton,
   FormContainer,
   Form,
   Button,
-  FormMessage,
+  ErrorMessage,
   FieldContainer,
+  SuccessMessage,
 } from './styles';
 
 interface PropTypes {
+  uploadResponse: { message: string, result: TrackInterface, error: boolean };
   uploadTrack?: any;
   children?: any;
 }
 
-class TrackListFooter extends React.Component<PropTypes, any> {
+class UploadCard extends React.Component<PropTypes, any> {
   constructor(props) {
     super(props);
 
@@ -53,7 +59,12 @@ class TrackListFooter extends React.Component<PropTypes, any> {
       this.setState({ formMessage: 'Preencha todos os campos.' });
     } else {
       this.props.uploadTrack(inputName, file);
-      this.setState({ formMessage: '' });
+
+      this.setState({
+        formMessage: '',
+        inputName: '',
+        file: null,
+      });
     }
 
     event.preventDefault();
@@ -81,6 +92,32 @@ class TrackListFooter extends React.Component<PropTypes, any> {
     );
   }
 
+  renderMessage() {
+    const { uploadResponse } = this.props;
+    const { formMessage } = this.state;
+
+    if (formMessage) {
+      return (
+        <ErrorMessage>{formMessage}</ErrorMessage>
+      );
+
+    }
+
+    if (uploadResponse.message) {
+      switch (uploadResponse.error) {
+        case true:
+          return (
+            <ErrorMessage>{uploadResponse.message}</ErrorMessage>
+          );
+
+        case false:
+          return (
+            <SuccessMessage>{uploadResponse.message}</SuccessMessage>
+          );
+      }
+    }
+  }
+
   render() {
     return (
       <Container>
@@ -104,7 +141,7 @@ class TrackListFooter extends React.Component<PropTypes, any> {
                 onChange={file => this.setState({ file })}
               />
             </FieldContainer>
-            {this.state.formMessage && <FormMessage>{this.state.formMessage}</FormMessage>}
+            {this.renderMessage()}
             <FieldContainer>
               <Button type={'submit'}>Enviar</Button>
             </FieldContainer>
@@ -115,10 +152,17 @@ class TrackListFooter extends React.Component<PropTypes, any> {
   }
 }
 
+function mapStateToProps(state) {
+  return {
+    uploadResponse: state.tracks.uploadResponse,
+  };
+}
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     uploadTrack,
+    fetchTracks,
   }, dispatch);
 }
 
-export default connect(null, mapDispatchToProps)(TrackListFooter);
+export default connect(mapStateToProps, mapDispatchToProps)(UploadCard);
