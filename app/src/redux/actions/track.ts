@@ -6,6 +6,7 @@ export const FETCH_TRACKS = 'FETCH_TRACKS';
 export const CHOOSE_TRACK = 'CHOOSE_TRACK';
 export const UPLOAD_TRACK = 'UPLOAD_TRACK';
 export const DELETE_TRACK = 'DELETE_TRACK';
+export const SET_SEARCH_TERM = 'SET_SEARCH_TERM';
 
 const BASE_URL = 'http://localhost:3005/api';
 

@@ -13,6 +13,7 @@ const initialState = {
     error: false,
   },
   currentTrack: null,
+  searchTerm: '',
 };
 
 export default function trackReducer(state = initialState, action) {
