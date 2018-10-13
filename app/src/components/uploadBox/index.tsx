@@ -10,6 +10,7 @@ interface PropTypes {
   accept: 'image' | 'audio';
   label: string;
   onChange: any;
+  hasFile: boolean;
 }
 
 class UploadBox extends React.Component<PropTypes, any> {
@@ -17,7 +18,6 @@ class UploadBox extends React.Component<PropTypes, any> {
     super(props);
 
     this.state = {
-      loaded: false,
       invalid: false,
       isOver: false,
     };
@@ -35,7 +35,6 @@ class UploadBox extends React.Component<PropTypes, any> {
       if (typeCheck && sizeCheck) {
         this.props.onChange(file);
         this.setState({
-          loaded: true,
           invalid: false,
         });
       } else {
@@ -44,7 +43,6 @@ class UploadBox extends React.Component<PropTypes, any> {
 
     } else {
       this.setState({
-        loaded: false,
         invalid: false,
       });
     }
@@ -64,7 +62,7 @@ class UploadBox extends React.Component<PropTypes, any> {
       };
     }
 
-    if (this.state.loaded) {
+    if (this.props.hasFile) {
       return {
         message: 'Arquivo selecionado.',
         color: '#00FF9B',
@@ -78,9 +76,7 @@ class UploadBox extends React.Component<PropTypes, any> {
   }
 
   render() {
-    const {
-      accept,
-    } = this.props;
+    const { accept } = this.props;
 
     const status = this.getStatus();
 

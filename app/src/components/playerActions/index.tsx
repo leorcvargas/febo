@@ -22,44 +22,49 @@ interface PropTypes {
   children?: any;
 }
 
-const PlayerActions = (props: PropTypes) => {
+class PlayerActions extends React.Component<PropTypes, any> {
+  constructor(props) {
+    super(props);
+  }
 
-  return (
-    <PlayerActionsRow>
-      <PlayerButton
-        onClick={() => props.toggleVolume(-0.1)}
-      >
-        <FaVolumeDown size={20} />
-      </PlayerButton>
+  render() {
+    return (
+      <PlayerActionsRow>
+        <PlayerButton
+          onClick={() => this.props.toggleVolume(-0.1)}
+        >
+          <FaVolumeDown size={20} />
+        </PlayerButton>
 
-      <PlayerButton
-        onClick={() => props.changeTrack(-1)}
-        disabled={!props.canChangeTrack.previous}
-      >
-        <FaBackward size={30} />
-      </PlayerButton>
+        <PlayerButton
+          onClick={() => this.props.changeTrack(-1)}
+          disabled={!this.props.canChangeTrack.previous}
+        >
+          <FaBackward size={30} />
+        </PlayerButton>
 
-      <PlayerButton onClick={props.togglePlay}>
-        {
-          !props.play ?
-            <FaPlay size={40} />
-            :
-            <FaPause size={40} />
-        }
-      </PlayerButton>
+        <PlayerButton onClick={this.props.togglePlay}>
+          {
+            !this.props.play ?
+              <FaPlay size={40} />
+              :
+              <FaPause size={40} />
+          }
+        </PlayerButton>
 
-      <PlayerButton
-        onClick={() => props.changeTrack(1)}
-        disabled={!props.canChangeTrack.next}
-      >
-        <FaForward size={30} />
-      </PlayerButton>
+        <PlayerButton
+          onClick={() => this.props.changeTrack(1)}
+          disabled={!this.props.canChangeTrack.next}
+        >
+          <FaForward size={30} />
+        </PlayerButton>
 
-      <PlayerButton onClick={() => props.toggleVolume(0.1)}>
-        <FaVolumeUp size={20} />
-      </PlayerButton>
-    </PlayerActionsRow>
-  );
-};
+        <PlayerButton onClick={() => this.props.toggleVolume(0.1)}>
+          <FaVolumeUp size={20} />
+        </PlayerButton>
+      </PlayerActionsRow>
+    );
+  }
+}
 
 export default PlayerActions;

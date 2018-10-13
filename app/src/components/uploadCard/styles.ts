@@ -66,11 +66,13 @@ export const FieldContainer = styled.div`
 
 export const ErrorMessage = styled.p`
   color: #ff5e5e;
+  margin: 0 0 10px 0;
   font-weight: 600;
 `;
 
 export const SuccessMessage = styled.p`
   color: #00c779;
+  margin: 0 0 10px 0;
   font-weight: 600;
 `;
 

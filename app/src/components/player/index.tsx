@@ -27,12 +27,27 @@ class Player extends React.Component<PropTypes, any> {
     this.state = {
       play: false,
       currentTime: 0,
+      duration: 0,
     };
 
     this.togglePlay = this.togglePlay.bind(this);
     this.toggleVolume = this.toggleVolume.bind(this);
     this.onSeek = this.onSeek.bind(this);
     this.changeTrack = this.changeTrack.bind(this);
+  }
+
+  componentDidMount() {
+    const node = this.audioRef.current;
+
+    node.onloadedmetadata = (event: any) => {
+      this.setState({ duration: event.target.duration });
+    };
+
+    node.oncanplay = (event: any) => {
+      if (this.state.play) {
+        node.play();
+      }
+    };
   }
 
   componentDidUpdate(prevProps: PropTypes) {
@@ -44,26 +59,21 @@ class Player extends React.Component<PropTypes, any> {
   setCurrentTimeInterval() {
     this.currentTimeInterval = setInterval(() => {
       if (this.audioRef.current) {
-        const isFinished = Math.floor(this.audioRef.current.currentTime) === this.audioRef.current.duration;
-
-        if (isFinished || !this.props.currentTrack) {
-          clearInterval(this.currentTimeInterval);
-        }
-
-        this.setState({ currentTime: this.audioRef.current.currentTime });
+        const currentTime = Math.floor(this.audioRef.current.currentTime);
+        this.setState({ currentTime });
       }
     });
   }
 
   startNewTrack() {
+    this.setCurrentTimeInterval();
+
+    this.audioRef.current.currentTime = 0;
+    // this.audioRef.current.play();
+
     this.setState({
       currentTime: 0,
       play: true,
-    }, () => {
-      this.setCurrentTimeInterval();
-      this.audioRef.current.currentTime = 0;
-      this.audioRef.current.play()
-        .catch(() => {});
     });
   }
 
@@ -124,7 +134,7 @@ class Player extends React.Component<PropTypes, any> {
       <PlayerContainer>
         <PlayerTimeline
           onSeek={this.onSeek}
-          duration={this.audioRef.current ? this.audioRef.current.duration : 0}
+          duration={this.state.duration}
           currentTime={this.state.currentTime}
         />
         <PlayerActions

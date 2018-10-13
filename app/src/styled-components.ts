@@ -4,6 +4,8 @@ import { ThemedStyledComponentsModule } from 'styled-components';
 interface ThemeInterface {
   primary?: boolean;
   hide?: boolean;
+  success?: boolean;
+  danger?: boolean;
 }
 
 const {

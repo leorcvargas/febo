@@ -49,6 +49,12 @@ class UploadCard extends React.Component<PropTypes, any> {
     this.handleFileNameChange = this.handleFileNameChange.bind(this);
   }
 
+  componentDidUpdate() {
+    if (this.props.emptyListMode && this.state.hideForm) {
+      this.setState({ hideForm: false });
+    }
+  }
+
   handleClick() {
     this.setState({ hideForm: !this.state.hideForm });
   }
@@ -61,9 +67,7 @@ class UploadCard extends React.Component<PropTypes, any> {
   }
 
   handleFileNameChange(value: string) {
-    this.setState({
-      inputName: value,
-    });
+    this.setState({ inputName: value });
   }
 
   handleSubmit(event) {
@@ -145,12 +149,8 @@ class UploadCard extends React.Component<PropTypes, any> {
       <Container>
         {this.renderButton()}
 
-        <FormContainer
-          theme={{ hide: this.state.hideForm }}
-        >
-          <Form
-            onSubmit={this.handleSubmit}
-          >
+        <FormContainer theme={{ hide: this.state.hideForm }}>
+          <Form onSubmit={this.handleSubmit}>
             <FieldContainer>
               <Label>Nome do arquivo:</Label>
               <Input
@@ -164,6 +164,7 @@ class UploadCard extends React.Component<PropTypes, any> {
                 accept={'audio'}
                 label={'Arraste seu áudio ou clique para escolher.'}
                 onChange={this.handleFileChange}
+                hasFile={this.state.file}
               />
             </FieldContainer>
             {this.renderMessage()}

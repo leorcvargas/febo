@@ -18,7 +18,7 @@ const initialState = {
 export default function trackReducer(state = initialState, action) {
   switch (action.type) {
     case FETCH_TRACKS: {
-      return { ...state, list: action.payload };
+      return { ...state, list: action.payload, currentTrack: action.payload[0] };
     }
 
     case CHOOSE_TRACK: {
