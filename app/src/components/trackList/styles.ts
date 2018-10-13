@@ -9,6 +9,6 @@ export const TrackListContainer = styled.div`
 `;
 
 export const List = styled.div`
-  max-height: calc(100vh - 56px);
+  height: calc(100vh - 56px);
   overflow-y: scroll;
 `;

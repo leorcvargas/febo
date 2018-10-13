@@ -5,6 +5,7 @@ import { TrackInterface } from 'src/interfaces/track';
 export const FETCH_TRACKS = 'FETCH_TRACKS';
 export const CHOOSE_TRACK = 'CHOOSE_TRACK';
 export const UPLOAD_TRACK = 'UPLOAD_TRACK';
+export const DELETE_TRACK = 'DELETE_TRACK';
 
 const BASE_URL = 'http://localhost:3005/api';
 
@@ -49,6 +50,23 @@ export function uploadTrack(name: string, file: File) {
 
   return {
     type: UPLOAD_TRACK,
+    payload: request,
+  };
+}
+
+export function removeTrack(trackId: string) {
+  const request = axios.delete(`${BASE_URL}/tracks/${trackId}`)
+    .then(res => ({
+      result: true,
+      trackId,
+    }))
+    .catch(err => ({
+      result: false,
+      trackId,
+    }));
+
+  return {
+    type: DELETE_TRACK,
     payload: request,
   };
 }

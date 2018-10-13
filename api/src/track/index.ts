@@ -13,4 +13,6 @@ routes.put('/image/:trackId', upload.single('img'), controller.saveImage);
 
 routes.get('/', controller.getAll);
 
+routes.delete('/:trackId', controller.deleteTrack);
+
 export default routes;

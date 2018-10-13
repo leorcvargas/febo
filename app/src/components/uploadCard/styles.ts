@@ -13,6 +13,7 @@ export const Container = styled.div`
 `;
 
 export const UploadButton = styled.button`
+  min-height: 40px;
   display: flex;
   align-items: center;
   border: none;
@@ -32,16 +33,14 @@ export const UploadButton = styled.button`
 
 export const FormContainer = styled.div`
   height: 300px;
+  display: flex;
 `;
 
 export const Form = styled.form`
   display: flex;
+  flex: 1;
   flex-direction: column;
   padding: 10px;
-`;
-
-export const Spacer = styled.div`
-  margin: 5px 0;
 `;
 
 export const Button = styled.button`
@@ -61,6 +60,7 @@ export const Button = styled.button`
 export const FieldContainer = styled.div`
   margin-bottom: 10px;
   display: flex;
+  margin-top: auto;
 `;
 
 export const ErrorMessage = styled.p`

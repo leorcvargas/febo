@@ -9,7 +9,8 @@ class TrackController {
     try {
       const track = new Track({
         name: req.body.name,
-        path: `${process.env.OWN_URL}${req.file.path}`,
+        path: req.file.path,
+        audio: `${process.env.OWN_URL}${req.file.path}`
       })
       const result = await track.save();
 
@@ -24,7 +25,7 @@ class TrackController {
       const { trackId } = req.params;
       const track = await Track.updateOne({ _id: trackId }, {
         $set: {
-          img: `${process.env.OWN_URL}${req.file.path}`,
+          img: req.file.path,
         }
       });
 
@@ -65,6 +66,30 @@ class TrackController {
       }
 
       return res.status(200).send();
+    } catch (err) {
+      return res.status(500).send(err);
+    }
+  }
+
+  async deleteTrack(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { trackId } = req.params;
+
+      const track = await Track.findById(trackId);
+      if (!track) {
+        return res.status(404).send();
+      }
+
+      return fs.unlink(track.path, (err) => {
+        if (err) {
+          return res.status(500).send(err);
+        }
+
+        track.remove();
+
+        return res.status(200).send();
+      });
+
     } catch (err) {
       return res.status(500).send(err);
     }

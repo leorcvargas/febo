@@ -12,6 +12,7 @@ import UploadCard from './uploadCard';
 import {
   PageView,
 } from './styles';
+import { bindActionCreators } from 'redux';
 
 interface PropTypes {
   tracks: TrackInterface[];
@@ -29,7 +30,13 @@ class App extends React.Component<PropTypes, any> {
   }
 
   renderCard() {
-    if (!this.props.currentTrack) {
+    if (!this.props.tracks.length) {
+      return (
+        <Card>
+          <CardHeader>Lista de áudios vazia</CardHeader>
+        </Card>
+      );
+    } else if (!this.props.currentTrack) {
       return (
         <Card>
           <CardHeader>Selecione um áudio da lista</CardHeader>
@@ -49,9 +56,12 @@ class App extends React.Component<PropTypes, any> {
   public render() {
     return (
       <PageView>
-        <TrackList tracks={this.props.tracks} />
+        <TrackList
+          tracks={this.props.tracks}
+          currentTrack={this.props.currentTrack}
+        />
         {this.renderCard()}
-        <UploadCard />
+        <UploadCard emptyListMode={!this.props.tracks.length ? true : false} />
       </PageView>
     );
   }
@@ -64,8 +74,10 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps() {
-  return { fetchTracks };
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    fetchTracks,
+  }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps())(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

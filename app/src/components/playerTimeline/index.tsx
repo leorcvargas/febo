@@ -26,7 +26,6 @@ class PlayerTimeline extends React.Component<PropTypes, any> {
   }
 
   render() {
-    console.log(this.props.duration);
     const {
       currentTime,
       duration,

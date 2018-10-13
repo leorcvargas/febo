@@ -2,6 +2,7 @@ import {
   FETCH_TRACKS,
   CHOOSE_TRACK,
   UPLOAD_TRACK,
+  DELETE_TRACK,
 } from '../actions/track';
 
 const initialState = {
@@ -15,7 +16,6 @@ const initialState = {
 };
 
 export default function trackReducer(state = initialState, action) {
-  console.log(action);
   switch (action.type) {
     case FETCH_TRACKS: {
       return { ...state, list: action.payload };
@@ -26,13 +26,21 @@ export default function trackReducer(state = initialState, action) {
     }
 
     case UPLOAD_TRACK: {
-      console.log(action);
       let list = state.list;
       if (!action.payload.error) {
         list = [...list, action.payload.result];
       }
 
       return { ...state, list, uploadResponse: action.payload };
+    }
+
+    case DELETE_TRACK: {
+      let list = state.list;
+      if (action.payload.result) {
+        list = state.list.filter(item => item._id !== action.payload.trackId);
+      }
+
+      return { ...state, list, currentTrack: null };
     }
 
     default: {

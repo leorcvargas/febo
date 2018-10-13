@@ -26,6 +26,7 @@ import {
 
 interface PropTypes {
   uploadResponse: { message: string, result: TrackInterface, error: boolean };
+  emptyListMode?: boolean;
   uploadTrack?: any;
   children?: any;
 }
@@ -35,7 +36,7 @@ class UploadCard extends React.Component<PropTypes, any> {
     super(props);
 
     this.state = {
-      hideForm: true,
+      hideForm: !this.props.emptyListMode,
       inputName: '',
       file: null,
       formMessage: '',
@@ -71,6 +72,10 @@ class UploadCard extends React.Component<PropTypes, any> {
   }
 
   renderButton() {
+    if (this.props.emptyListMode) {
+      return <UploadButton />;
+    }
+
     if (!this.state.hideForm) {
       return (
         <UploadButton
@@ -100,7 +105,6 @@ class UploadCard extends React.Component<PropTypes, any> {
       return (
         <ErrorMessage>{formMessage}</ErrorMessage>
       );
-
     }
 
     if (uploadResponse.message) {
@@ -116,6 +120,8 @@ class UploadCard extends React.Component<PropTypes, any> {
           );
       }
     }
+
+    return <p />;
   }
 
   render() {

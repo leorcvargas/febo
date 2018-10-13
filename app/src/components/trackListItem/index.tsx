@@ -1,15 +1,22 @@
 import * as React from 'react';
+import {
+  FaTrash,
+} from 'react-icons/fa';
 
 import {
   Container,
   TrackImage,
   TrackName,
+  RemoveTrack,
+  Wrapper,
 } from './styles';
 import { TrackInterface } from 'src/interfaces/track';
 
 interface PropTypes {
   track: TrackInterface;
-  onClick: any;
+  onSelect: any;
+  onRemove: any;
+  selected?: boolean;
   children?: any;
 }
 
@@ -22,19 +29,29 @@ class TrackList extends React.Component<PropTypes, any> {
     if (!this.props.track) {
       return null;
     }
+
     const {
-      img,
-      name,
-    } = this.props.track;
-    const src = img ? img : 'images/default.png';
+      selected,
+      onRemove,
+      onSelect,
+      track,
+    } = this.props;
 
     return (
-      <Container
-        onClick={() => this.props.onClick(this.props.track)}
-      >
-        <TrackImage src={src} />
-        <TrackName>{name}</TrackName>
-      </Container>
+      <Wrapper>
+        <Container
+          onClick={() => onSelect(track)}
+          style={selected ? { borderLeft: '5px solid #00ff9b' } : {}}
+        >
+          <TrackImage
+            src={track.img ? track.img : 'images/default.png'}
+          />
+          <TrackName>{track.name}</TrackName>
+        </Container>
+        <RemoveTrack onClick={() => onRemove(track._id)}>
+          <FaTrash />
+        </RemoveTrack>
+      </Wrapper>
     );
   }
 }

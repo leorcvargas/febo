@@ -5,12 +5,17 @@ export interface TrackModel extends Document {
   name: string;
   img: string;
   path: string;
+  audio: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
 const TrackSchema = new Schema({
   name: {
+    type: String,
+    required: true,
+  },
+  audio: {
     type: String,
     required: true,
   },

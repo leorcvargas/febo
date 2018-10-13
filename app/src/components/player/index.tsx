@@ -49,10 +49,12 @@ class Player extends React.Component<PropTypes, any> {
     } else {
       this.audioRef.current.play();
       this.currentTimeInterval = setInterval(() => {
-        if (Math.floor(this.audioRef.current.currentTime) === this.audioRef.current.duration) {
-          clearInterval(this.currentTimeInterval);
+        if (this.audioRef.current) {
+          if (Math.floor(this.audioRef.current.currentTime) === this.audioRef.current.duration || !this.props.track) {
+            clearInterval(this.currentTimeInterval);
+          }
+          this.setState({ currentTime: this.audioRef.current.currentTime });
         }
-        this.setState({ currentTime: this.audioRef.current.currentTime });
       });
     }
 
@@ -81,7 +83,7 @@ class Player extends React.Component<PropTypes, any> {
           togglePlay={this.togglePlay}
         />
         <audio
-          src={`${this.props.track.path}`}
+          src={this.props.track.audio}
           ref={this.audioRef}
         />
       </PlayerContainer>
