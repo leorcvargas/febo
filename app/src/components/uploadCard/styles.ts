@@ -22,7 +22,7 @@ export const UploadButton = styled.button`
   color: #2f2f2f;
   background: #fff;
   border-radius: 6px;
-  box-shadow: 0 0 2rem rgba(0,0,0,.4);
+  /* box-shadow: 0 0 2rem rgba(0,0,0,.4); */
   flex: 1;
   justify-content: space-between;
   padding: 10px;
@@ -33,7 +33,7 @@ export const UploadButton = styled.button`
 
 export const FormContainer = styled.div`
   height: 300px;
-  display: flex;
+  display: ${props => props.theme.hide ? 'none' : 'flex'}
 `;
 
 export const Form = styled.form`
@@ -60,6 +60,7 @@ export const Button = styled.button`
 export const FieldContainer = styled.div`
   margin-bottom: 10px;
   display: flex;
+  flex-direction: column;
   margin-top: auto;
 `;
 
@@ -71,4 +72,10 @@ export const ErrorMessage = styled.p`
 export const SuccessMessage = styled.p`
   color: #00c779;
   font-weight: 600;
+`;
+
+export const Label = styled.label`
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 5px;
 `;

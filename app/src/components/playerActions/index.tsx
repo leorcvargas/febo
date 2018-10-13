@@ -4,6 +4,8 @@ import {
   FaPause,
   FaForward,
   FaBackward,
+  FaVolumeUp,
+  FaVolumeDown,
 } from 'react-icons/fa';
 
 import {
@@ -14,6 +16,9 @@ import {
 interface PropTypes {
   play: boolean;
   togglePlay: any;
+  toggleVolume: any;
+  changeTrack: any;
+  canChangeTrack: { next: boolean, previous: boolean };
   children?: any;
 }
 
@@ -21,7 +26,16 @@ const PlayerActions = (props: PropTypes) => {
 
   return (
     <PlayerActionsRow>
-      <PlayerButton>
+      <PlayerButton
+        onClick={() => props.toggleVolume(-0.1)}
+      >
+        <FaVolumeDown size={20} />
+      </PlayerButton>
+
+      <PlayerButton
+        onClick={() => props.changeTrack(-1)}
+        disabled={!props.canChangeTrack.previous}
+      >
         <FaBackward size={30} />
       </PlayerButton>
 
@@ -34,8 +48,15 @@ const PlayerActions = (props: PropTypes) => {
         }
       </PlayerButton>
 
-      <PlayerButton>
+      <PlayerButton
+        onClick={() => props.changeTrack(1)}
+        disabled={!props.canChangeTrack.next}
+      >
         <FaForward size={30} />
+      </PlayerButton>
+
+      <PlayerButton onClick={() => props.toggleVolume(0.1)}>
+        <FaVolumeUp size={20} />
       </PlayerButton>
     </PlayerActionsRow>
   );

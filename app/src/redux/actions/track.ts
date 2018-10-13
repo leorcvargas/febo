@@ -70,3 +70,12 @@ export function removeTrack(trackId: string) {
     payload: request,
   };
 }
+
+export function changeTrack(trackId: string, trackList: TrackInterface[], way: number) {
+  const trackPosition = trackList.findIndex(track => track._id === trackId);
+
+  return {
+    type: CHOOSE_TRACK,
+    payload: trackList[trackPosition + way],
+  };
+}

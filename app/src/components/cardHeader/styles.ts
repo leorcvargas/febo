@@ -9,6 +9,7 @@ export const Header = styled.div`
   color: #2f2f2f;
 `;
 
-export const Title = styled.h1`
-  margin-top: 0;
+export const Title = styled.p`
+  font-weight: 600;
+  margin: 0 0 25px 0;
 `;

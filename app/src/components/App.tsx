@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import { fetchTracks } from '../redux/actions/track';
 import { TrackInterface } from 'src/interfaces/track';
@@ -12,7 +13,6 @@ import UploadCard from './uploadCard';
 import {
   PageView,
 } from './styles';
-import { bindActionCreators } from 'redux';
 
 interface PropTypes {
   tracks: TrackInterface[];
@@ -48,7 +48,7 @@ class App extends React.Component<PropTypes, any> {
       <Card>
         <CardHeader>{this.props.currentTrack.name}</CardHeader>
         <CardImage source={this.props.currentTrack.img} />
-        <Player track={this.props.currentTrack} />
+        <Player />
       </Card>
     );
   }
@@ -61,7 +61,9 @@ class App extends React.Component<PropTypes, any> {
           currentTrack={this.props.currentTrack}
         />
         {this.renderCard()}
-        <UploadCard emptyListMode={!this.props.tracks.length ? true : false} />
+        <UploadCard
+          emptyListMode={!this.props.tracks.length ? true : false}
+        />
       </PageView>
     );
   }

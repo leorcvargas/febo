@@ -19,6 +19,9 @@ class PlayerTimeline extends React.Component<PropTypes, any> {
   }
 
   defineTimeLabel(seconds: number) {
+    if (isNaN(seconds)) {
+      return '0:00';
+    }
     const minutes = Math.floor(seconds / 60);
     const secondsResult = Math.floor(seconds - (minutes * 60));
 
@@ -29,20 +32,21 @@ class PlayerTimeline extends React.Component<PropTypes, any> {
     const {
       currentTime,
       duration,
+      onSeek,
     } = this.props;
 
     return (
       <TimelineContainer>
         <Timeline
           type={'range'}
-          max={duration}
-          value={currentTime}
-          onChange={event => this.props.onSeek(event.target.value)}
+          max={isNaN(duration) ? 0 : duration}
+          value={Math.floor(currentTime)}
+          onChange={event => onSeek(event.target.value)}
           step={'1'}
         />
         <TimePanel>
-          <span>{this.defineTimeLabel(this.props.currentTime)}</span>
-          <span>{this.defineTimeLabel(this.props.duration)}</span>
+          <span>{this.defineTimeLabel(currentTime)}</span>
+          <span>{this.defineTimeLabel(duration)}</span>
         </TimePanel>
       </TimelineContainer>
     );

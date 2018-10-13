@@ -22,6 +22,7 @@ import {
   ErrorMessage,
   FieldContainer,
   SuccessMessage,
+  Label,
 } from './styles';
 
 interface PropTypes {
@@ -44,10 +45,25 @@ class UploadCard extends React.Component<PropTypes, any> {
 
     this.handleClick = this.handleClick.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleFileChange = this.handleFileChange.bind(this);
+    this.handleFileNameChange = this.handleFileNameChange.bind(this);
   }
 
   handleClick() {
     this.setState({ hideForm: !this.state.hideForm });
+  }
+
+  handleFileChange(file: File) {
+    this.setState({
+      file,
+      inputName: file.name,
+    });
+  }
+
+  handleFileNameChange(value: string) {
+    this.setState({
+      inputName: value,
+    });
   }
 
   handleSubmit(event) {
@@ -129,22 +145,25 @@ class UploadCard extends React.Component<PropTypes, any> {
       <Container>
         {this.renderButton()}
 
-        <FormContainer hidden={this.state.hideForm}>
+        <FormContainer
+          theme={{ hide: this.state.hideForm }}
+        >
           <Form
             onSubmit={this.handleSubmit}
           >
             <FieldContainer>
+              <Label>Nome do arquivo:</Label>
               <Input
                 placeholder={'Digite o nome do áudio...'}
                 value={this.state.inputName}
-                onChange={value => this.setState({ inputName: value })}
+                onChange={this.handleFileNameChange}
               />
             </FieldContainer>
             <FieldContainer>
               <UploadBox
                 accept={'audio'}
                 label={'Arraste seu áudio ou clique para escolher.'}
-                onChange={file => this.setState({ file })}
+                onChange={this.handleFileChange}
               />
             </FieldContainer>
             {this.renderMessage()}

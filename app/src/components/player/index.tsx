@@ -1,14 +1,19 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import { TrackInterface } from 'src/interfaces/track';
+import { changeTrack } from '../../redux/actions/track';
+import PlayerActions from '../playerActions';
+import PlayerTimeline from '../playerTimeline';
 import {
   PlayerContainer,
 } from './styles';
-import PlayerActions from '../playerActions';
-import PlayerTimeline from '../playerTimeline';
 
 interface PropTypes {
-  track: TrackInterface;
+  tracks: TrackInterface[];
+  currentTrack: TrackInterface;
+  changeTrack: any;
   children?: any;
 }
 
@@ -22,24 +27,44 @@ class Player extends React.Component<PropTypes, any> {
     this.state = {
       play: false,
       currentTime: 0,
-      currentTrack: this.props.track,
     };
 
     this.togglePlay = this.togglePlay.bind(this);
+    this.toggleVolume = this.toggleVolume.bind(this);
     this.onSeek = this.onSeek.bind(this);
+    this.changeTrack = this.changeTrack.bind(this);
   }
 
   componentDidUpdate(prevProps: PropTypes) {
-    if (this.props.track._id !== this.props.track._id) {
-      clearInterval(this.currentTimeInterval);
-      this.audioRef.current.pause();
-      this.audioRef.current.currentTime = 0;
-      this.setState({
-        currentTime: 0,
-        currentTrack: this.props.track,
-        play: false,
-      });
+    if (prevProps.currentTrack._id !== this.props.currentTrack._id) {
+      this.startNewTrack();
     }
+  }
+
+  setCurrentTimeInterval() {
+    this.currentTimeInterval = setInterval(() => {
+      if (this.audioRef.current) {
+        const isFinished = Math.floor(this.audioRef.current.currentTime) === this.audioRef.current.duration;
+
+        if (isFinished || !this.props.currentTrack) {
+          clearInterval(this.currentTimeInterval);
+        }
+
+        this.setState({ currentTime: this.audioRef.current.currentTime });
+      }
+    });
+  }
+
+  startNewTrack() {
+    this.setState({
+      currentTime: 0,
+      play: true,
+    }, () => {
+      this.setCurrentTimeInterval();
+      this.audioRef.current.currentTime = 0;
+      this.audioRef.current.play()
+        .catch(() => {});
+    });
   }
 
   togglePlay(): void {
@@ -48,17 +73,26 @@ class Player extends React.Component<PropTypes, any> {
       clearInterval(this.currentTimeInterval);
     } else {
       this.audioRef.current.play();
-      this.currentTimeInterval = setInterval(() => {
-        if (this.audioRef.current) {
-          if (Math.floor(this.audioRef.current.currentTime) === this.audioRef.current.duration || !this.props.track) {
-            clearInterval(this.currentTimeInterval);
-          }
-          this.setState({ currentTime: this.audioRef.current.currentTime });
-        }
-      });
+      this.setCurrentTimeInterval();
     }
 
     this.setState({ play: !this.state.play });
+  }
+
+  toggleVolume(value: number): void {
+    const vol = this.audioRef.current.volume + value;
+    if (vol > 1) {
+      this.audioRef.current.volume = 1;
+    } else if (vol < 0) {
+      this.audioRef.current.volume = 0;
+    } else {
+      this.audioRef.current.volume = vol;
+    }
+  }
+
+  changeTrack(way: number) {
+    const { currentTrack, tracks } = this.props;
+    this.props.changeTrack(currentTrack._id, tracks, way);
   }
 
   onSeek(seconds: number) {
@@ -66,24 +100,42 @@ class Player extends React.Component<PropTypes, any> {
     this.setState({ currentTime: seconds });
   }
 
-  render() {
-    if (!this.props.track) {
-      return null;
+  canChangeTrack(): { next: boolean, previous: boolean } {
+    const { currentTrack, tracks } = this.props;
+    const currentPosition = tracks.findIndex(track => track._id === currentTrack._id);
+
+    if (tracks.length === 1) {
+      return { next: false, previous: false };
     }
 
+    if (currentPosition === tracks.length - 1) {
+      return { next: false, previous: true };
+    }
+
+    if (!currentPosition && tracks.length > 1) {
+      return { next: true, previous: false };
+    }
+
+    return { next: true, previous: true };
+  }
+
+  render() {
     return (
       <PlayerContainer>
         <PlayerTimeline
           onSeek={this.onSeek}
-          duration={this.audioRef.current ? this.audioRef.current.duration : 60}
+          duration={this.audioRef.current ? this.audioRef.current.duration : 0}
           currentTime={this.state.currentTime}
         />
         <PlayerActions
           play={this.state.play}
           togglePlay={this.togglePlay}
+          toggleVolume={this.toggleVolume}
+          changeTrack={this.changeTrack}
+          canChangeTrack={this.canChangeTrack()}
         />
         <audio
-          src={this.props.track.audio}
+          src={this.props.currentTrack.audio}
           ref={this.audioRef}
         />
       </PlayerContainer>
@@ -91,4 +143,17 @@ class Player extends React.Component<PropTypes, any> {
   }
 }
 
-export default Player;
+function mapStateToProps(state) {
+  return {
+    tracks: state.tracks.list,
+    currentTrack: state.tracks.currentTrack,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    changeTrack,
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Player);

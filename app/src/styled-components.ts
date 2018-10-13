@@ -2,7 +2,8 @@ import * as styledComponents from 'styled-components';
 import { ThemedStyledComponentsModule } from 'styled-components';
 
 interface ThemeInterface {
-  primary: boolean;
+  primary?: boolean;
+  hide?: boolean;
 }
 
 const {
