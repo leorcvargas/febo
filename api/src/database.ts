@@ -8,7 +8,7 @@ class Database {
     }
 
     constructor() {
-        this.url = 'mongodb://localhost/febo-api'
+        this.url = process.env.MONGO_URI;
     }
 
     public connect(): void {
