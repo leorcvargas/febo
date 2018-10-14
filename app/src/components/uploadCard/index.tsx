@@ -12,6 +12,7 @@ import UploadBox from '../uploadBox';
 import {
   uploadTrack,
   fetchTracks,
+  setUploadingStatus,
 } from '../../redux/actions/track';
 import {
   Container,
@@ -23,12 +24,15 @@ import {
   FieldContainer,
   SuccessMessage,
   Label,
+  LoadingMessage,
 } from './styles';
 
 interface PropTypes {
   uploadResponse: { message: string, result: TrackInterface, error: boolean };
   emptyListMode?: boolean;
   uploadTrack?: any;
+  isUploading?: boolean;
+  setUploadingStatus: any;
   children?: any;
 }
 
@@ -79,6 +83,7 @@ class UploadCard extends React.Component<PropTypes, any> {
     if (!inputName || !file) {
       this.setState({ formMessage: 'Preencha todos os campos.' });
     } else {
+      this.props.setUploadingStatus(true);
       this.props.uploadTrack(inputName, file);
 
       this.setState({
@@ -120,6 +125,12 @@ class UploadCard extends React.Component<PropTypes, any> {
   renderMessage() {
     const { uploadResponse } = this.props;
     const { formMessage } = this.state;
+
+    if (this.props.isUploading) {
+      return (
+        <LoadingMessage>Enviando...</LoadingMessage>
+      );
+    }
 
     if (formMessage) {
       return (
@@ -181,6 +192,7 @@ class UploadCard extends React.Component<PropTypes, any> {
 function mapStateToProps(state) {
   return {
     uploadResponse: state.tracks.uploadResponse,
+    isUploading: state.tracks.isUploading,
   };
 }
 
@@ -188,6 +200,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     uploadTrack,
     fetchTracks,
+    setUploadingStatus,
   }, dispatch);
 }
 

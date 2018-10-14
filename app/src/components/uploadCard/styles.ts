@@ -76,6 +76,12 @@ export const SuccessMessage = styled.p`
   font-weight: 600;
 `;
 
+export const LoadingMessage = styled.p`
+  color: #111;
+  margin: 0 0 10px 0;
+  font-weight: 600;
+`;
+
 export const Label = styled.label`
   font-size: 12px;
   font-weight: 600;

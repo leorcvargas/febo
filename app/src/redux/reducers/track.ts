@@ -3,6 +3,8 @@ import {
   CHOOSE_TRACK,
   UPLOAD_TRACK,
   DELETE_TRACK,
+  SET_FETCHING_STATUS,
+  SET_UPLOADING_STATUS,
 } from '../actions/track';
 
 const initialState = {
@@ -14,12 +16,19 @@ const initialState = {
   },
   currentTrack: null,
   searchTerm: '',
+  isFetching: false,
+  isLoading: false,
 };
 
 export default function trackReducer(state = initialState, action) {
   switch (action.type) {
     case FETCH_TRACKS: {
-      return { ...state, list: action.payload, currentTrack: action.payload[0] };
+      return {
+        ...state,
+        list: action.payload,
+        currentTrack: action.payload[0],
+        isFetching: false,
+      };
     }
 
     case CHOOSE_TRACK: {
@@ -32,7 +41,12 @@ export default function trackReducer(state = initialState, action) {
         list = [...list, action.payload.result];
       }
 
-      return { ...state, list, uploadResponse: action.payload };
+      return {
+        ...state,
+        list,
+        uploadResponse: action.payload,
+        isUploading: false,
+      };
     }
 
     case DELETE_TRACK: {
@@ -42,6 +56,14 @@ export default function trackReducer(state = initialState, action) {
       }
 
       return { ...state, list, currentTrack: null };
+    }
+
+    case SET_FETCHING_STATUS: {
+      return { ...state, isFetching: action.payload };
+    }
+
+    case SET_UPLOADING_STATUS: {
+      return { ...state, isUploading: action.payload };
     }
 
     default: {

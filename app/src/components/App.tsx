@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { fetchTracks } from '../redux/actions/track';
+import { fetchTracks, setFetchingStatus } from '../redux/actions/track';
 import { TrackInterface } from 'src/interfaces/track';
 import Card from './card';
 import CardImage from './cardImage';
@@ -10,13 +10,13 @@ import CardHeader from './cardHeader';
 import Player from './player';
 import TrackList from './trackList';
 import UploadCard from './uploadCard';
-import {
-  PageView,
-} from './styles';
+import { PageView } from './styles';
 
 interface PropTypes {
   tracks: TrackInterface[];
   currentTrack: TrackInterface;
+  isFetching: boolean;
+  setFetchingStatus: any;
   fetchTracks: any;
 }
 
@@ -26,10 +26,19 @@ class App extends React.Component<PropTypes, any> {
   }
 
   componentDidMount() {
+    this.props.setFetchingStatus(true);
     this.props.fetchTracks();
   }
 
   renderCard() {
+    if (this.props.isFetching) {
+      return (
+        <Card>
+          <CardHeader>Carregando...</CardHeader>
+        </Card>
+      );
+    }
+
     if (!this.props.tracks.length) {
       return (
         <Card>
@@ -73,12 +82,14 @@ function mapStateToProps(state) {
   return {
     tracks: state.tracks.list,
     currentTrack: state.tracks.currentTrack,
+    isFetching: state.tracks.isFetching,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchTracks,
+    setFetchingStatus,
   }, dispatch);
 }
 

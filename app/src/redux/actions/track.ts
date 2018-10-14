@@ -3,12 +3,15 @@ import axios from 'axios';
 import { TrackInterface } from 'src/interfaces/track';
 
 export const FETCH_TRACKS = 'FETCH_TRACKS';
+export const SET_FETCHING_STATUS = 'SET_FETCHING_STATUS';
 export const CHOOSE_TRACK = 'CHOOSE_TRACK';
 export const UPLOAD_TRACK = 'UPLOAD_TRACK';
+export const SET_UPLOADING_STATUS = 'SET_UPLOADING_STATUS';
 export const DELETE_TRACK = 'DELETE_TRACK';
 export const SET_SEARCH_TERM = 'SET_SEARCH_TERM';
 
-const BASE_URL = 'http://localhost:3005/api';
+const BASE_URL = 'https://febo-server.azurewebsites.net/api';
+// const BASE_URL = 'http://localhost:3005/api';
 
 export function fetchTracks() {
   const request = axios.get(`${BASE_URL}/tracks/`)
@@ -78,5 +81,19 @@ export function changeTrack(trackId: string, trackList: TrackInterface[], way: n
   return {
     type: CHOOSE_TRACK,
     payload: trackList[trackPosition + way],
+  };
+}
+
+export function setFetchingStatus(value: boolean) {
+  return {
+    type: SET_FETCHING_STATUS,
+    payload: value,
+  };
+}
+
+export function setUploadingStatus(value: boolean) {
+  return {
+    type: SET_UPLOADING_STATUS,
+    payload: value,
   };
 }

@@ -11,4 +11,7 @@ export const PlayerButton = styled.button`
   outline: none;
   background: none;
   cursor: pointer;
+  &:active {
+    transform: scale(1.3);
+  }
 `;

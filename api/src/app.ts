@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as morgan from 'morgan';
+import * as path from 'path';
 const cors = require('cors');
 
 import routes from './routes';
@@ -17,6 +18,7 @@ class App {
         require('dotenv').config();
         this.app.use(cors());
         this.app.use('/uploads', express.static('uploads'));
+        this.app.use(express.static(path.join(__dirname, 'public')));
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: false }));
         this.app.use(morgan('dev'));
