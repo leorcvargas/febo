@@ -48,6 +48,13 @@ class Player extends React.Component<PropTypes, any> {
         node.play();
       }
     };
+
+    node.onended = (event: any) => {
+      const { currentTrack, tracks } = this.props;
+      if (currentTrack._id !== tracks[tracks.length - 1]._id) {
+        this.changeTrack(1);
+      }
+    };
   }
 
   componentDidUpdate(prevProps: PropTypes) {
@@ -69,8 +76,6 @@ class Player extends React.Component<PropTypes, any> {
     this.setCurrentTimeInterval();
 
     this.audioRef.current.currentTime = 0;
-    // this.audioRef.current.play();
-
     this.setState({
       currentTime: 0,
       play: true,
