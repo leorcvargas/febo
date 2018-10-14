@@ -50,7 +50,6 @@ class UploadBox extends React.Component<PropTypes, any> {
 
   handleDrop(event) {
     event.preventDefault();
-    console.log(event);
     this.handleFileChange(event.dataTransfer.files);
   }
 
