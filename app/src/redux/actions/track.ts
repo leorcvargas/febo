@@ -10,8 +10,7 @@ export const SET_UPLOADING_STATUS = 'SET_UPLOADING_STATUS';
 export const DELETE_TRACK = 'DELETE_TRACK';
 export const SET_SEARCH_TERM = 'SET_SEARCH_TERM';
 
-const BASE_URL = 'https://febo-server.azurewebsites.net/api';
-// const BASE_URL = 'http://localhost:3005/api';
+const BASE_URL = 'http://localhost:3005/api';
 
 export function fetchTracks() {
   const request = axios.get(`${BASE_URL}/tracks/`)
